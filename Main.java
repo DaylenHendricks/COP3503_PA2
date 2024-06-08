@@ -13,18 +13,27 @@ public class Main {
         int m = scan.nextInt();//rows
         int n = scan.nextInt();//columns
         int s = scan.nextInt();//# words to find
+        String input;//current scanner line
         char[][] matrix = new char[m][n];//letter matrix
-        char[][] searchWords;//words to find
+        ArrayList<String>[] searchWords = new ArrayList[s];//words to find
 
-        for(int i = 0; i < m; i++){
+        for(int i = 0; i < m; i++){//build matrix
+            input = scan.nextLine();
             for(int j = 0; j < n; j++){
-                matrix[i][j] = scan.next().charAt(j);
+                matrix[i][j] = input.charAt(j);
+            }
+        }
+
+        for(int i = 0; i < s; i++){//get target words
+            String str = scan.nextLine();
+            for(int j = 0; j < str.length(); j++){//I want to read in a line or string, and store it in the solution matrix for retrieval later
+                // searchWords[i] = str.get();
             }
         }
 
     }
 
-    public static void printSol(char[][] solutionMatrix, int rows, int columns){
+    public static void printSolution(char[][] solutionMatrix, int rows, int columns){
         for(int i = 0; i < rows; i++){
             System.out.println("[");
 
@@ -55,7 +64,7 @@ class element {//the elements of the matrix
     }
 
     public boolean markUsed(){
-        if(this.marked = true;)
+        if(this.marked = true)
             return true;
         else
             return false;
