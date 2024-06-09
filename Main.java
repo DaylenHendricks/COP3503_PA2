@@ -2,7 +2,7 @@
 This program is written by: Daylen Hendricks */
 
 import java.util.Scanner;
-import java.util.ArrayList;;
+import java.util.ArrayList;
 
 public class Main {
     public char[] targetWord;
@@ -25,10 +25,8 @@ public class Main {
         }
 
         for(int i = 0; i < s; i++){//get target words
-            String str = scan.nextLine();
-            for(int j = 0; j < str.length(); j++){//I want to read in a line or string, and store it in the solution matrix for retrieval later
-                // searchWords[i] = str.get();
-            }
+            String str = scan.nextLine();//I want to read in a line or string, and store it in the solution matrix for retrieval later
+                searchWords[i].add(str);
         }
 
     }
@@ -54,20 +52,26 @@ class element {//the elements of the matrix
 
     public element(char letter){
         this.letter = letter;
+        this.used = false;
+        this.marked = false;
     }
-
     public boolean checkMatch(char letter){
         if(this.letter == letter)
             return true;
         else
             return false;
     }
-
-    public boolean markUsed(){
+    public boolean checkMark(){
         if(this.marked = true)
             return true;
         else
             return false;
+    }
+    public void mark(){
+        this.marked = true;
+    }
+    public void use(){
+        this.used = true;
     }
 
 }
