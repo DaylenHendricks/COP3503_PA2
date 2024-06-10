@@ -1,158 +1,156 @@
-/* COP 3503C Assignment 2
-This program is written by: Daylen Hendricks */
-
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Main {
-    public char[] targetWord;
-    public char[] foundWord;
-
-    public static void main(String[] args){
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        int m = scan.nextInt();//rows
-        int n = scan.nextInt();//columns
-        int s = scan.nextInt();//# words to find
-        String input;//current scanner line
-        Element[][] matrix = new Element[m][n];//letter matrix
-        char[][] solutionMatrix = new char[m][n];
-        ArrayList<String>[] searchWords = new ArrayList[s];//words to find
 
-        for (int i = 0; i < s; i++) {//initializing arraylist
+        int m = scan.nextInt(); // rows
+        int n = scan.nextInt(); // columns
+        int s = scan.nextInt(); // # words to find
+        scan.nextLine(); // Consume the newline character after the integers
+
+        Element[][] matrix = new Element[m][n]; // letter matrix
+        ArrayList<String>[] searchWords = new ArrayList[s]; // words to find
+
+        for (int i = 0; i < s; i++) { // initializing arraylist
             searchWords[i] = new ArrayList<>();
         }
 
-        for(int i = 0; i < m; i++){//build matrix
-            input = scan.nextLine();
-            for(int j = 0; j < n; j++){
-                matrix[i][j] = new Element(input.charAt(j));
+        // Build the matrix
+        for (int i = 0; i < m; i++) {
+            String input = scan.nextLine();
+            String[] chars = input.split(" ");
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = new Element(chars[j].charAt(0));
             }
         }
 
-        for(int i = 0; i < s; i++){//get target words
-            String str = scan.nextLine();//I want to read in a line or string, and store it in the solution matrix for retrieval later
-                searchWords[i].add(str);
+        // Get target words
+        for (int i = 0; i < s; i++) {
+            String str = scan.nextLine(); // Read in a line or string, and store it in the solution matrix for retrieval later
+            searchWords[i].add(str);
         }
 
-
-        for(int i = 0; i < s; i++){//begin recursion "findWord()""
+        // Find each target word
+        for (int i = 0; i < s; i++) {
             String targetWord = searchWords[i].get(0);
-            findWord(matrix, targetWord, solutionMatrix);
-        }
-
-
-    scan.close();//close scanner
-    }
-
-    public static boolean findWord(Element[][] matrix, String targetWord, char[][] solutionMatrix){
-            if (findAlg(matrix, 0, 0, targetWord, 0, solutionMatrix) == false) {//begin recursion
-                System.out.print("Solution doesn't exist");//if no sol found
-                return false;
-            }
-            else{
-                // printSolution(char[][] solutionMatrix, int rows, int columns;
-            return true;
-            }
-    }
-
-    public static boolean findAlg(Element[][] matrix, int x, int y, String targetWord, int targetIndex, char[][] solutionMatrix){
-        // String target = searchWords.get(0);
-
-            if(targetIndex == targetWord.length() && matrix[x][y].getLetter() == targetWord.charAt(targetWord.length())){//best case, solution
-                return true;
-            }
-            else{//if not solution
-
-                if (x < 0 || x > matrix[0].length || y < 0 || y > matrix.length || matrix[x][y].isMarked() == false)
-                    return false;
-
-                if(matrix[x][y].isMatch(targetWord.charAt(targetIndex))){//isSafe
-                    if(matrix[x][y].isMarked())
-                        return false;
-                    else
-                        matrix[x][y].mark();
-
-
-                    if(findAlg(matrix, x+1, y, targetWord, targetIndex, solutionMatrix)){//right
-
-                    }
-
-                    if(findAlg(matrix, x+1, y-1, targetWord, targetIndex, solutionMatrix)){//down right
-                        
-                    }
-
-                    if(findAlg(matrix, x, y-1, targetWord, targetIndex, solutionMatrix)){//down
-                        
-                    }
-
-                    if(findAlg(matrix, x-1, y-1, targetWord, targetIndex, solutionMatrix)){//down left
-                        
-                    }
-
-                    if(findAlg(matrix, x-1, y, targetWord, targetIndex, solutionMatrix)){//left
-                        
-                    }
-
-                    if(findAlg(matrix, x-1, y+1, targetWord, targetIndex, solutionMatrix)){//up left
-                        
-                    }
-
-                    if(findAlg(matrix, x, y+1, targetWord, targetIndex, solutionMatrix)){//up
-                        
-                    }
-
-                    if(findAlg(matrix, x+1, y+1, targetWord, targetIndex, solutionMatrix)){//up right
-                        
-                    }
+            System.out.println("Looking for " + targetWord);
+            char[][] solutionMatrix = new char[m][n]; // Reset solution matrix
+            for (int row = 0; row < m; row++) {
+                for (int col = 0; col < n; col++) {
+                    solutionMatrix[row][col] = ' ';
                 }
-                    return false;
             }
-        
-    
+            if (!findWord(matrix, targetWord, solutionMatrix, m, n)) {
+                System.out.println(targetWord + " not found!");
+            } else {
+                printSolution(solutionMatrix, m, n);
+            }
+            System.out.println();
         }
-    public static void printSolution(char[][] solutionMatrix, int rows, int columns){
-        for(int i = 0; i < rows; i++){
-            System.out.println("[");
 
-            for(int j = 0; j < columns - 1; j++){
-                System.out.print(solutionMatrix[i][j] + ",");
-                if(j + 1 == columns)
-                    System.out.print(solutionMatrix[i][j+1]);
+        scan.close(); // close scanner
+    }
+
+    public static boolean findWord(Element[][] matrix, String targetWord, char[][] solutionMatrix, int rows, int columns) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (findAlg(matrix, i, j, targetWord, 0, solutionMatrix)) { // begin recursion
+                    return true;
+                }
             }
-            System.out.print("]");
+        }
+        return false; // default if something goes wrong
+    }
+
+    public static boolean findAlg(Element[][] matrix, int x, int y, String targetWord, int targetIndex, char[][] solutionMatrix) {
+        if (targetIndex == targetWord.length()) {
+            return true;
+        }
+
+        if (x < 0 || x >= matrix.length || y < 0 || y >= matrix[0].length || matrix[x][y].isMarked() || matrix[x][y].isUsed()) {
+            return false;
+        }
+
+        if (matrix[x][y].isMatch(targetWord.charAt(targetIndex))) {
+            matrix[x][y].mark();
+            matrix[x][y].use();
+            solutionMatrix[x][y] = targetWord.charAt(targetIndex);
+
+            int[] rowDir = {0, 1, 1, 1, 0, -1, -1, -1};
+            int[] colDir = {1, 1, 0, -1, -1, -1, 0, 1};
+
+            for (int dir = 0; dir < 8; dir++) {
+                int newRow = x + rowDir[dir];
+                int newCol = y + colDir[dir];
+                if (findAlg(matrix, newRow, newCol, targetWord, targetIndex + 1, solutionMatrix)) {
+                    return true;
+                }
+            }
+
+            // If none of the directions work, backtrack
+            matrix[x][y].unMark();
+            matrix[x][y].unUse();
+            solutionMatrix[x][y] = ' ';
+        }
+        return false;
+    }
+
+    public static void printSolution(char[][] solutionMatrix, int rows, int columns) {
+        for (int i = 0; i < rows; i++) {
+            System.out.print("[");
+            for (int j = 0; j < columns; j++) {
+                System.out.print(solutionMatrix[i][j]);
+                if (j < columns - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("]");
         }
     }
 }
 
-class Element {//the elements of the matrix
+class Element { // the elements of the matrix
     private char letter;
-    private boolean used;//already in found word
-    private boolean marked;//isn't in target word
+    private boolean used; // already in found word
+    private boolean marked; // isn't in target word
 
-    public Element(char letter){
+    public Element(char letter) {
         this.letter = letter;
         this.used = false;
         this.marked = false;
     }
-    public char getLetter(){
+
+    public char getLetter() {
         return this.letter;
     }
-    public boolean isMatch(char letter){
-        if(this.letter == letter)
-            return true;
-        else
-            return false;
+
+    public boolean isMatch(char letter) {
+        return this.letter == letter;
     }
-    public boolean isMarked(){
-        if(this.marked = true)
-            return true;
-        else
-            return false;
+
+    public boolean isMarked() {
+        return this.marked;
     }
-    public void mark(){
+
+    public void mark() {
         this.marked = true;
     }
-    public void use(){
+
+    public void unMark() {
+        this.marked = false;
+    }
+
+    public boolean isUsed() {
+        return this.used;
+    }
+
+    public void use() {
         this.used = true;
+    }
+
+    public void unUse() {
+        this.used = false;
     }
 }
