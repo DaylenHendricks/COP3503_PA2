@@ -1,3 +1,6 @@
+/* COP 3503C Assignment 2
+This program is written by: Daylen Hendricks */
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -5,15 +8,15 @@ public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
-        int m = scan.nextInt(); // rows
-        int n = scan.nextInt(); // columns
+        int m = scan.nextInt(); // Rows
+        int n = scan.nextInt(); // Columns
         int s = scan.nextInt(); // # words to find
         scan.nextLine(); // Consume the newline character after the integers
 
-        Element[][] matrix = new Element[m][n]; // letter matrix
-        ArrayList<String>[] searchWords = new ArrayList[s]; // words to find
+        Element[][] matrix = new Element[m][n]; // Letter matrix
+        ArrayList<String>[] searchWords = new ArrayList[s]; // Words to find
 
-        for (int i = 0; i < s; i++) { // initializing arraylist
+        for (int i = 0; i < s; i++) { // Initializing arraylist
             searchWords[i] = new ArrayList<>();
         }
 
@@ -50,18 +53,18 @@ public class Main {
             System.out.println();
         }
 
-        scan.close(); // close scanner
+        scan.close(); // Close scanner
     }
 
     public static boolean findWord(Element[][] matrix, String targetWord, char[][] solutionMatrix, int rows, int columns) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if (findAlg(matrix, i, j, targetWord, 0, solutionMatrix)) { // begin recursion
+                if (findAlg(matrix, i, j, targetWord, 0, solutionMatrix)) { // Begin recursion
                     return true;
                 }
             }
         }
-        return false; // default if something goes wrong
+        return false; // Default if something goes wrong
     }
 
     public static boolean findAlg(Element[][] matrix, int x, int y, String targetWord, int targetIndex, char[][] solutionMatrix) {
@@ -111,10 +114,10 @@ public class Main {
     }
 }
 
-class Element { // the elements of the matrix
+class Element { // The elements of the matrix
     private char letter;
-    private boolean used; // already in found word
-    private boolean marked; // isn't in target word
+    private boolean used; // Already in found word
+    private boolean marked; // Isn't in target word
 
     public Element(char letter) {
         this.letter = letter;
